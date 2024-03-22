@@ -190,48 +190,6 @@
           </ul>
         </div>
 
-        <!-- <div
-          class="my-3 flex px-0 sm:px-10 items-center py-2 sm:py-0 order-last"
-        >
-          <div class="flex flex-col gap-1 w-full">
-            <SfInput type="email" placeholder="Email-Adresse">
-              <template #prefix
-                ><SfIconPerson class="text-primary-700"
-              /></template>
-            </SfInput>
-            <SfInput type="password" placeholder="Passwort">
-              <template #prefix
-                ><SfIconLockOpen class="text-primary-700"
-              /></template>
-            </SfInput>
-          </div>
-
-          <div class="flex flex-col gap-1">
-            <div
-              class="h-[40px] flex justify-center items-center text-primary-700"
-            >
-              <p>Willkommen!</p>
-            </div>
-            <SfButton
-              v-for="actionItem in loginItems"
-              :key="actionItem.ariaLabel"
-              class="px-8 mr-2 -ml-0.5 rounded-md text-primary-700 hover:bg-primary-100 active:bg-primary-200 hover:text-primary-50 active:text-primary-50 w-full"
-              :aria-label="actionItem.ariaLabel"
-              variant="secondary"
-              square
-            >
-              <template #prefix>
-                <Component :is="actionItem.icon" />
-              </template>
-              <span
-                v-if="actionItem.role === 'login'"
-                class="xl:inline-flex whitespace-nowrap"
-                >{{ actionItem.label }}</span
-              >
-            </SfButton>
-          </div>
-        </div> -->
-
         <nav class="flex-1 flex justify-end lg:order-last lg:ml-4">
           <div class="flex flex-row flex-nowrap">
             <SfButton
@@ -261,11 +219,22 @@
               square
               :tag="NuxtLink"
               :href="actionItem.href"
+              @click="
+                actionItem.role === 'login'
+                  ? (showLoginModal = !showLoginModal)
+                  : ''
+              "
             >
               <template #prefix>
                 <Component :is="actionItem.icon" />
               </template>
             </SfButton>
+
+            <LoginModal
+              v-if="showLoginModal"
+              :isOpen="showLoginModal"
+              @closed="onLoginModalClosed"
+            />
           </div>
         </nav>
       </div>
@@ -290,7 +259,6 @@ import {
   SfIconSearch,
   SfIconCall,
   SfIconEmail,
-  SfIconLockOpen,
 } from "@storefront-ui/vue";
 
 import { ref } from "vue";
@@ -310,21 +278,18 @@ onClickOutside(menuRef, () => {
 });
 
 const inputValue = ref("");
+const showLoginModal = ref(false);
+
 const NuxtLink = resolveComponent("NuxtLink");
 const cartStore = useCartStore();
+
+function onLoginModalClosed(isClosed: boolean) {
+  showLoginModal.value = isClosed;
+}
 
 const search = () => {
   alert(`Successfully found 10 results for ${inputValue.value}`);
 };
-
-const loginItems = [
-  {
-    icon: SfIconPerson,
-    label: "Einloggen",
-    ariaLabel: "Einloggen",
-    role: "login",
-  },
-];
 
 const actionItems = [
   {

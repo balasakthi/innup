@@ -17,7 +17,7 @@
           <li v-for="(item, idx) in contactMethods" :key="idx">
             <h4 class="text-gray-500 text-lg font-medium">{{ item.title }}</h4>
             <div class="mt-3 flex items-center gap-x-3">
-              <Component :is="item.icon" />
+              <component :is="item.icon" :key="'icon-' + idx" />
               <a class="text-gray-500" :href="item.href">{{ item.contact }}</a>
             </div>
           </li>
@@ -28,18 +28,16 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { shallowRef } from "vue";
 
 import {
   SfIconCall,
   SfIconLocationOn,
   SfIconEmail,
-  SfButton,
-  SfLink,
   SfIconCheckCircle,
 } from "@storefront-ui/vue";
 
-const contactMethods = ref([
+const contactMethods = shallowRef([
   {
     icon: SfIconLocationOn,
     contact: "Theodor-Heuss-Allee 21, 28215 Bremen, Deutschland.",
