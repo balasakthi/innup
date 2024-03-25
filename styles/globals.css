@@ -23,10 +23,13 @@
 
   };
 
-
 @tailwind components;
 @tailwind utilities;
 
 .sf-input:focus {
   outline: 2px solid blue;
+}
+
+*,*:focus,*:hover{
+  outline:none;
 }
